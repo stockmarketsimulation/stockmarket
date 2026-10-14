@@ -155,7 +155,6 @@ input[type=number]{font-family:var(--mono);font-variant-numeric:tabular-nums}
       <label><input type="checkbox" id="hNames"> Line names</label>
       <label><input type="checkbox" id="hHints"> Hints</label>
       <label><input type="checkbox" id="hAuto" checked> Continue when everyone is ready</label>
-      <label><input type="checkbox" id="hLoop" checked> Loop rounds</label>
     </div>
   </div>
 </section>
@@ -345,7 +344,7 @@ function hStop(){H.playing=false;clearInterval(H.timer);H.timer=null}
 async function hTick(){if(H.i>=N){hStop();hRender();return}H.i++;
   if(H.phase==='forming'&&H.i-1===H.R.breakoutIdx){H.phase='setup';hStop();hRender();await hPush(true);return}
   if(H.phase==='setup')H.phase='running';
-  if(H.i>=N){hStop();H.phase='ended';hRender();await hPush(true);await hSettle();if($('hLoop').checked){let s=25;const tickDown=()=>{const el=$('hBanner').querySelector('small');if(el)el.textContent='Next round in '+s+'s';if(s--<=0){hLoad(H.sym,H.round+1).then(hStart);return}H.countdown=setTimeout(tickDown,1000)};tickDown()}return}
+  if(H.i>=N){hStop();H.phase='ended';hRender();await hPush(true);await hSettle();const el=$('hBanner').querySelector('small');if(el)el.textContent='Press "Next round" when you are ready.';return}
   hRender();hPush()}
 async function hPush(force){if(!sb)return;const now=Date.now();if(!force&&now-H.lastPush<400)return;H.lastPush=now;
   const state={round:H.round,i:H.i,phase:H.phase,playing:H.playing,revealAll:H.R.revealAll,breakoutIdx:H.R.breakoutIdx,entry:H.R.entry,t:now};
